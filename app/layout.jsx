@@ -24,7 +24,7 @@ const mono = JetBrains_Mono({
 export const metadata = {
   title: "Nicola Frizzale — Executive Sous Chef",
   description:
-    "Nicola Frizzale, Executive Sous Chef. Italian cooking, private dinners, chef's table and off-site events. By appointment. +39 333 578 8520 · frizzale.nicola@icloud.com",
+    "Nicola Frizzale, Executive Sous Chef. Italian cooking, private dinners, chef's table and off-site events. By appointment. Tel +86 158 2106 9064 · WhatsApp +39 333 578 8520 · frizzale.nicola@icloud.com",
   openGraph: {
     title: "Nicola Frizzale — Executive Sous Chef",
     description:

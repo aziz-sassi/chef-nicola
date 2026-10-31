@@ -1,10 +1,37 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const TEL = "+966532685304";
-const TEL_DISPLAY = "+966 53 268 5304";
+const TEL = "+8615821069064";
+const TEL_DISPLAY = "+86 158 2106 9064";
+const WA = "393335788520";
+const WA_DISPLAY = "+39 333 578 8520";
 const EMAIL = "frizzale.nicola@icloud.com";
+
+const waLink = (msg = "Hello Nicola, I'd like to enquire about a booking.") =>
+  `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+
+const WaIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.47-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.53-.07-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.04 21.5h-.01a9.4 9.4 0 0 1-4.8-1.32l-.34-.2-3.57.94.95-3.48-.22-.36a9.4 9.4 0 0 1-1.44-5.02c0-5.2 4.23-9.43 9.44-9.43a9.4 9.4 0 0 1 9.43 9.44c0 5.2-4.23 9.43-9.44 9.43zm8.03-17.46A11.27 11.27 0 0 0 12.04.75C5.8.75.72 5.83.72 12.08c0 2 .52 3.94 1.51 5.65L.62 23.25l5.65-1.48a11.3 11.3 0 0 0 5.77 1.47h.01c6.24 0 11.32-5.08 11.32-11.33 0-3.03-1.18-5.87-3.3-8z" />
+  </svg>
+);
+
+const GALLERY = [
+  { c: "m-tall", img: "dessert-rose.jpg", alt: "Apple-rose dessert with gold leaf and salted-caramel ice cream", d: 0 },
+  { c: "", img: "dish-pour.jpg", alt: "A small jug pouring sauce over a plated course", d: 60 },
+  { c: "m-wide", img: "spread-picnic.jpg", alt: "Outdoor spread on a wooden table in a garden", d: 120 },
+  { c: "", img: "focaccia.jpg", alt: "Tomato and olive focaccia", d: 40 },
+  { c: "m-tall", img: "dessert-parisbrest.jpg", alt: "A round pastry dusted with icing sugar on slate", d: 100 },
+  { c: "", img: "dish-extra-1.jpg", alt: "Plated dish detail", d: 80 },
+  { c: "", img: "dish-extra-3.jpg", alt: "Plated dish detail", d: 180 },
+  { c: "", img: "dish-extra-5.jpg", alt: "Plated dish detail", d: 60 },
+  { c: "m-wide", img: "chef-plating-2.jpg", alt: "Chef plating outdoors", d: 120 },
+  { c: "", img: "dish-extra-7.jpg", alt: "Plated dish detail", d: 40 },
+  { c: "m-tall", img: "dish-extra-9.jpg", alt: "Plated dish detail", d: 100 },
+  { c: "", img: "dish-extra-10.jpg", alt: "Plated dish detail", d: 160 },
+  { c: "", img: "dish-extra-2.jpg", alt: "Plated dish detail", d: 40 },
+];
 
 // Helper: turn an array of nodes into mask-reveal lines
 function MaskLine({ children, delay = 0 }) {
@@ -16,6 +43,23 @@ function MaskLine({ children, delay = 0 }) {
 }
 
 export default function Page() {
+  const [lightbox, setLightbox] = useState(null);
+
+  useEffect(() => {
+    if (lightbox === null) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setLightbox(null);
+      if (e.key === "ArrowRight") setLightbox((i) => (i + 1) % GALLERY.length);
+      if (e.key === "ArrowLeft") setLightbox((i) => (i - 1 + GALLERY.length) % GALLERY.length);
+    };
+    document.documentElement.classList.add("lb-open");
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.documentElement.classList.remove("lb-open");
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [lightbox]);
+
   useEffect(() => {
     const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
@@ -25,6 +69,7 @@ export default function Page() {
     const nav = document.querySelector(".nav");
     const onScroll = () => {
       if (nav) nav.classList.toggle("scrolled", window.scrollY > 24);
+      document.body.classList.toggle("past-hero", window.scrollY > window.innerHeight * 0.8);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
@@ -66,13 +111,13 @@ export default function Page() {
       document.documentElement.classList.add("splash-active");
       requestAnimationFrame(() => splash.classList.add("show"));
       timers.push(setTimeout(() => splash.classList.add("show-text"), 60));
-      timers.push(setTimeout(() => splash.classList.add("hide-text"), 1500));
-      timers.push(setTimeout(() => splash.classList.add("open"), 1900));
+      timers.push(setTimeout(() => splash.classList.add("hide-text"), 1250));
+      timers.push(setTimeout(() => splash.classList.add("open"), 1550));
       timers.push(setTimeout(() => {
         document.documentElement.classList.remove("splash-active");
         document.body.classList.add("is-loaded");
         startObservers();
-      }, 2050));
+      }, 1700));
       timers.push(setTimeout(() => {
         if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
       }, 3000));
@@ -157,6 +202,7 @@ export default function Page() {
         </a>
         <nav className="nav-links" aria-label="primary">
           <a href="#approach">Approach</a>
+          <a href="#experiences">Experiences</a>
           <a href="#plates">Plates</a>
           <a href="#atelier">Atelier</a>
           <a href="#gallery">Gallery</a>
@@ -190,7 +236,10 @@ export default function Page() {
                     <path d="M3 11L11 3M11 3H4.5M11 3V9.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="square" />
                   </svg>
                 </a>
-                <a href={`https://wa.me/${TEL.replace("+", "")}`} target="_blank" rel="noopener" className="btn btn-ghost">WhatsApp</a>
+                <a href={waLink()} target="_blank" rel="noopener" className="btn btn-ghost">
+                  <WaIcon size={15} />
+                  <span>WhatsApp</span>
+                </a>
               </div>
             </div>
             <div className="hero-ticker" aria-hidden="true">
@@ -226,9 +275,9 @@ export default function Page() {
 
         <div className="hero-floor">
           <div className="floor-col"><span className="kicker">Availability</span><span>By appointment</span></div>
-          <div className="floor-col"><span className="kicker">Phone</span><span>{TEL_DISPLAY}</span></div>
+          <div className="floor-col"><span className="kicker">Phone</span><span><a className="floor-link" href={`tel:${TEL}`}>{TEL_DISPLAY}</a></span></div>
+          <div className="floor-col"><span className="kicker">WhatsApp</span><span><a className="floor-link" href={waLink()} target="_blank" rel="noopener">{WA_DISPLAY}</a></span></div>
           <div className="floor-col"><span className="kicker">Email</span><span><a className="floor-link" href={`mailto:${EMAIL}`}>{EMAIL}</a></span></div>
-          <div className="floor-col scroll-cue"><span className="kicker">Scroll</span><span className="arrow">↓</span></div>
         </div>
       </section>
 
@@ -287,10 +336,64 @@ export default function Page() {
         </div>
       </section>
 
+      {/* EXPERIENCES */}
+      <section id="experiences" className="offers">
+        <header className="section-head">
+          <span className="section-num" data-reveal>03 — Experiences</span>
+          <h2 className="section-title display reveal-mask" data-reveal data-delay="80">
+            <MaskLine delay={0}>Three ways</MaskLine>
+            <MaskLine delay={140}>to <em>sit down.</em></MaskLine>
+          </h2>
+        </header>
+
+        <div className="offer-grid">
+          {[
+            {
+              n: "i.", img: "dish-pour.jpg", title: "Private dinner",
+              body: "A tasting menu cooked and served in your home or villa. Shopping, service and clean-down handled.",
+              meta: "2 — 12 guests",
+              msg: "Hello Nicola, I'd like to enquire about a private dinner.",
+            },
+            {
+              n: "ii.", img: "dish-caviar.jpg", title: "Chef's table",
+              body: "An evening at the pass. Course by course, cooked in front of the table and talked through.",
+              meta: "Up to 10 guests",
+              msg: "Hello Nicola, I'd like to enquire about a chef's table evening.",
+            },
+            {
+              n: "iii.", img: "spread-picnic.jpg", title: "Events & collaborations",
+              body: "Off-site events, pop-ups, menu consulting and kitchen collaborations with restaurants and hotels.",
+              meta: "On request",
+              msg: "Hello Nicola, I'd like to enquire about an event / collaboration.",
+            },
+          ].map((o, i) => (
+            <article key={o.title} className="offer" data-reveal data-delay={i * 120}>
+              <div className="offer-photo">
+                <img src={`/media/${o.img}`} alt="" loading="lazy" />
+                <span className="offer-n">{o.n}</span>
+              </div>
+              <div className="offer-body">
+                <h3 className="offer-title">{o.title}</h3>
+                <p>{o.body}</p>
+                <div className="offer-foot">
+                  <span className="offer-meta">{o.meta}</span>
+                  <a href={waLink(o.msg)} target="_blank" rel="noopener" className="offer-cta">
+                    Enquire
+                    <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path d="M3 11L11 3M11 3H4.5M11 3V9.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="square" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       {/* PLATES */}
       <section id="plates" className="signatures">
         <header className="section-head wide">
-          <span className="section-num" data-reveal>03 — Plates</span>
+          <span className="section-num" data-reveal>04 — Plates</span>
           <h2 className="section-title display center reveal-mask" data-reveal data-delay="80">
             <MaskLine delay={0}><em>From</em> the kitchen</MaskLine>
             <MaskLine delay={140}><span className="tiny-rule" /></MaskLine>
@@ -302,12 +405,12 @@ export default function Page() {
 
         <ol className="dish-list">
           {[
-            { n: "01", img: "dish-tartare.jpg", alt: "Beef tartare with cured yolk and shaved black truffle", title: "Tartare, yolk, truffle" },
-            { n: "02", img: "dish-langoustine.jpg", alt: "Scampi tartare in clear green jelly with edible flowers", title: "Scampi tartare, green jelly", reverse: true },
-            { n: "03", img: "dish-caviar.jpg", alt: "Composition of green vegetables and caviar in a warm orange sauce", title: "Garden, caviar" },
-            { n: "04", img: "dish-carpaccio.jpg", alt: "Beef carpaccio fanned across a ridged white plate", title: "Beef carpaccio", reverse: true },
-            { n: "05", img: "dish-tenderloin.jpg", alt: "Sliced rare beef tenderloin with chanterelles and charcoal salt", title: "Tenderloin, chanterelles" },
-            { n: "06", img: "dish-milanese.jpg", alt: "Bone-in breaded veal Milanese topped with shaved black truffle", title: "Milanese, black truffle", reverse: true },
+            { n: "01", img: "dish-tartare.jpg", alt: "Beef tartare with cured yolk and shaved black truffle", title: "Tartare, yolk, truffle", sub: "Hand-cut beef, a cured yolk to break over it, black truffle shaved at the table." },
+            { n: "02", img: "dish-langoustine.jpg", alt: "Scampi tartare in clear green jelly with edible flowers", title: "Scampi tartare, green jelly", sub: "Raw scampi under a clear herb jelly, finished with garden flowers.", reverse: true },
+            { n: "03", img: "dish-caviar.jpg", alt: "Composition of green vegetables and caviar in a warm orange sauce", title: "Garden, caviar", sub: "Green vegetables at their best, a warm sauce, a spoon of caviar for salt." },
+            { n: "04", img: "dish-carpaccio.jpg", alt: "Beef carpaccio fanned across a ridged white plate", title: "Beef carpaccio", sub: "The classic, sliced thin and dressed simply. Nothing added that isn't needed.", reverse: true },
+            { n: "05", img: "dish-tenderloin.jpg", alt: "Sliced rare beef tenderloin with chanterelles and charcoal salt", title: "Tenderloin, chanterelles", sub: "Rested and sliced rare, with chanterelles and a charcoal salt." },
+            { n: "06", img: "dish-milanese.jpg", alt: "Bone-in breaded veal Milanese topped with shaved black truffle", title: "Milanese, black truffle", sub: "Bone-in veal, fried in butter the Milanese way, black truffle over the top.", reverse: true },
           ].map((d) => (
             <li key={d.n} className={`dish${d.reverse ? " reverse" : ""}`} data-reveal>
               <div className="dish-photo reveal-image">
@@ -317,6 +420,8 @@ export default function Page() {
                 <div>
                   <span className="dish-num">{d.n}</span>
                   <h3 className="dish-name">{d.title}</h3>
+                  <span className="dish-rule" />
+                  <p className="dish-sub">{d.sub}</p>
                 </div>
               </div>
             </li>
@@ -327,7 +432,7 @@ export default function Page() {
       {/* ATELIER */}
       <section id="atelier" className="atelier">
         <div className="atelier-head">
-          <span className="section-num light" data-reveal>04 — Atelier</span>
+          <span className="section-num light" data-reveal>05 — Atelier</span>
           <h2 className="display light reveal-mask" data-reveal data-delay="80">
             <MaskLine delay={0}>In</MaskLine>
             <MaskLine delay={140}><em>service.</em></MaskLine>
@@ -402,7 +507,7 @@ export default function Page() {
       {/* GALLERY */}
       <section id="gallery" className="gallery">
         <header className="section-head">
-          <span className="section-num" data-reveal>05 — Gallery</span>
+          <span className="section-num" data-reveal>06 — Gallery</span>
           <h2 className="section-title display reveal-mask" data-reveal data-delay="80">
             <MaskLine delay={0}>A field of</MaskLine>
             <MaskLine delay={140}><em>fragments.</em></MaskLine>
@@ -410,23 +515,11 @@ export default function Page() {
         </header>
 
         <div className="masonry">
-          {[
-            { c: "m-tall", img: "dessert-rose.jpg", alt: "Apple-rose dessert with gold leaf and salted-caramel ice cream", d: 0 },
-            { c: "", img: "dish-pour.jpg", alt: "A small jug pouring sauce over a plated course", d: 60 },
-            { c: "m-wide", img: "spread-picnic.jpg", alt: "Outdoor spread on a wooden table in a garden", d: 120 },
-            { c: "", img: "focaccia.jpg", alt: "Tomato and olive focaccia", d: 40 },
-            { c: "m-tall", img: "dessert-parisbrest.jpg", alt: "A round pastry dusted with icing sugar on slate", d: 100 },
-            { c: "", img: "dish-extra-1.jpg", alt: "Plated dish detail", d: 80 },
-            { c: "", img: "dish-extra-3.jpg", alt: "Plated dish detail", d: 180 },
-            { c: "", img: "dish-extra-5.jpg", alt: "Plated dish detail", d: 60 },
-            { c: "m-wide", img: "chef-plating-2.jpg", alt: "Chef plating outdoors", d: 120 },
-            { c: "", img: "dish-extra-7.jpg", alt: "Plated dish detail", d: 40 },
-            { c: "m-tall", img: "dish-extra-9.jpg", alt: "Plated dish detail", d: 100 },
-            { c: "", img: "dish-extra-10.jpg", alt: "Plated dish detail", d: 160 },
-            { c: "", img: "dish-extra-2.jpg", alt: "Plated dish detail", d: 40 },
-          ].map((m, i) => (
+          {GALLERY.map((m, i) => (
             <figure key={i} className={`m-item ${m.c} reveal-image`} data-reveal data-delay={m.d}>
-              <img src={`/media/${m.img}`} alt={m.alt} loading="lazy" />
+              <button type="button" className="m-open" onClick={() => setLightbox(i)} aria-label={`Open image: ${m.alt}`}>
+                <img src={`/media/${m.img}`} alt={m.alt} loading="lazy" />
+              </button>
             </figure>
           ))}
         </div>
@@ -436,7 +529,7 @@ export default function Page() {
       <section id="contact" className="contact">
         <div className="contact-grid">
           <div className="contact-type">
-            <span className="section-num light" data-reveal>06 — Contact</span>
+            <span className="section-num light" data-reveal>07 — Contact</span>
             <h2 className="display light contact-title reveal-mask" data-reveal data-delay="60">
               <MaskLine delay={0}>Reserve the</MaskLine>
               <MaskLine delay={160}><span className="gold-dark"><em>kitchen.</em></span></MaskLine>
@@ -458,9 +551,9 @@ export default function Page() {
             </a>
 
             <div className="contact-row" data-reveal data-delay="560">
-              <a href={`https://wa.me/${TEL.replace("+", "")}`} target="_blank" rel="noopener" className="ic-link">
+              <a href={waLink()} target="_blank" rel="noopener" className="ic-link">
                 <span className="ic-k">WhatsApp</span>
-                <span className="ic-v">{TEL_DISPLAY}</span>
+                <span className="ic-v">{WA_DISPLAY}</span>
               </a>
               <a href={`mailto:${EMAIL}`} className="ic-link">
                 <span className="ic-k">Email</span>
@@ -480,12 +573,35 @@ export default function Page() {
         </div>
       </section>
 
+      {/* LIGHTBOX */}
+      {lightbox !== null && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label="Gallery" onClick={() => setLightbox(null)}>
+          <img src={`/media/${GALLERY[lightbox].img}`} alt={GALLERY[lightbox].alt} onClick={(e) => e.stopPropagation()} />
+          <button type="button" className="lb-btn lb-close" onClick={() => setLightbox(null)} aria-label="Close">×</button>
+          <button type="button" className="lb-btn lb-prev" aria-label="Previous"
+            onClick={(e) => { e.stopPropagation(); setLightbox((i) => (i - 1 + GALLERY.length) % GALLERY.length); }}>←</button>
+          <button type="button" className="lb-btn lb-next" aria-label="Next"
+            onClick={(e) => { e.stopPropagation(); setLightbox((i) => (i + 1) % GALLERY.length); }}>→</button>
+          <span className="lb-count">{String(lightbox + 1).padStart(2, "0")} / {String(GALLERY.length).padStart(2, "0")}</span>
+        </div>
+      )}
+
+      {/* FLOATING WHATSAPP */}
+      <a href={waLink()} target="_blank" rel="noopener" className="wa-float" aria-label={`WhatsApp ${WA_DISPLAY}`}>
+        <WaIcon size={22} />
+        <span className="wa-float-label">WhatsApp</span>
+      </a>
+
       {/* FOOTER */}
       <footer className="foot">
         <div className="foot-row">
           <span className="foot-mark">Nicola Frizzale<em>.</em></span>
           <span className="foot-meta">Executive Sous Chef / Executive Chef</span>
-          <span className="foot-meta foot-tel"><a href={`tel:${TEL}`}>{TEL_DISPLAY}</a></span>
+          <span className="foot-meta foot-tel">
+            <a href={`tel:${TEL}`}>{TEL_DISPLAY}</a>
+            <span className="foot-sep">·</span>
+            <a href={waLink()} target="_blank" rel="noopener">WA {WA_DISPLAY}</a>
+          </span>
         </div>
         <div className="foot-rule" />
         <div className="foot-row small">
